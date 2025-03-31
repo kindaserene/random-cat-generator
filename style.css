@@ -159,3 +159,26 @@ footer a:hover {
 .api-key-info a:hover {
     text-decoration: underline;
 }
+
+.site-header {
+    padding: 1rem 0;
+    margin-bottom: 1.5rem;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.site-logo {
+    height: 40px;
+    margin-right: 10px;
+}
+
+/* You might want to adjust your existing h1 styles */
+h1 {
+    font-size: 2.5rem;
+    color: #ff6b6b;
+    margin: 0;
+}

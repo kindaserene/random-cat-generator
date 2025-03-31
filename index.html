@@ -5,10 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Random Cat Generator</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Add favicon link -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
     <div class="container">
-        <h1>Random Cat Generator</h1>
+        <header class="site-header">
+            <div class="logo-container">
+                <img src="cat-logo.png" alt="Cat Logo" class="site-logo">
+                <h1>Random Cat Generator</h1>
+            </div>
+        </header>
         <div class="cat-container">
             <img id="cat-image" src="" alt="Random cat">
             <div class="loading-spinner" id="loading-spinner"></div>
@@ -16,7 +23,7 @@
         <button id="new-cat-btn">Get New Cat</button>
     </div>
     <footer>
-        <p>Created with ❤️ by Serene | <a href="https://github.com/yourusername/random-cat-generator" target="_blank">View on GitHub</a></p>
+        <p>Created with ❤️ | <a href="https://github.com/yourusername/random-cat-generator" target="_blank">View on GitHub</a></p>
     </footer>
     <script src="script.js"></script>
 </body>
