@@ -12,7 +12,7 @@ A simple and fun website that displays random cat pictures every time you visit 
 
 ## Demo
 
-You can see a live demo of this project at: https://kindaserene.github.io/random-cat-generator
+You can see a live demo of this project at: [https://kindaserene.github.io/random-cat-generator](https://kindaserene.github.io/random-cat-generator/)
 
 ## Technologies Used
 
