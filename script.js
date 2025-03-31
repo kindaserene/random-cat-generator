@@ -3,9 +3,55 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingSpinner = document.getElementById('loading-spinner');
     const newCatBtn = document.getElementById('new-cat-btn');
     
-    // Your API key for The Cat API
-    // Replace 'YOUR_API_KEY' with your actual API key from https://thecatapi.com/
-    const API_KEY = 'live_OkKdJNTAPmYipqsZEELIAUBaolMSN3PP6ADkk3fBQU8ZiykqoctsEZpGDKe2A0RK';
+    // Check if an API key is saved in localStorage
+    let apiKey = localStorage.getItem('catApiKey');
+    
+    // Create API key input elements
+    const apiKeyContainer = document.createElement('div');
+    apiKeyContainer.className = 'api-key-container';
+    
+    const apiKeyInput = document.createElement('input');
+    apiKeyInput.type = 'text';
+    apiKeyInput.id = 'api-key-input';
+    apiKeyInput.placeholder = 'Enter your Cat API key here';
+    apiKeyInput.value = apiKey || '';
+    
+    const apiKeySaveBtn = document.createElement('button');
+    apiKeySaveBtn.textContent = 'Save API Key';
+    apiKeySaveBtn.className = 'api-key-btn';
+    
+    const apiKeyInfo = document.createElement('p');
+    apiKeyInfo.className = 'api-key-info';
+    apiKeyInfo.innerHTML = apiKey 
+        ? 'Using saved API key. <a href="https://thecatapi.com" target="_blank">Need a key?</a>' 
+        : 'Get a free API key at <a href="https://thecatapi.com" target="_blank">TheCatAPI.com</a>';
+    
+    // Add elements to the container
+    apiKeyContainer.appendChild(apiKeyInput);
+    apiKeyContainer.appendChild(apiKeySaveBtn);
+    apiKeyContainer.appendChild(apiKeyInfo);
+    
+    // Add the container to the page
+    document.querySelector('.container').insertBefore(apiKeyContainer, document.querySelector('footer'));
+    
+    // Save API key to localStorage when button is clicked
+    apiKeySaveBtn.addEventListener('click', () => {
+        const newApiKey = apiKeyInput.value.trim();
+        
+        if (newApiKey) {
+            localStorage.setItem('catApiKey', newApiKey);
+            apiKeyInfo.innerHTML = 'API key saved! <a href="https://thecatapi.com" target="_blank">Need a key?</a>';
+            apiKey = newApiKey;
+            
+            // Fetch a new cat with the new API key
+            fetchRandomCat();
+        } else {
+            apiKeyInfo.textContent = 'Please enter a valid API key';
+            setTimeout(() => {
+                apiKeyInfo.innerHTML = 'Get a free API key at <a href="https://thecatapi.com" target="_blank">TheCatAPI.com</a>';
+            }, 3000);
+        }
+    });
     
     // Function to fetch a random cat image
     async function fetchRandomCat() {
@@ -14,37 +60,30 @@ document.addEventListener('DOMContentLoaded', () => {
         catImage.style.display = 'none';
         
         try {
-            // Using The Cat API with API key authentication
-            const headers = {
-                'x-api-key': API_KEY
-            };
+            // Configure request based on whether we have an API key
+            const url = 'https://api.thecatapi.com/v1/images/search';
+            const options = {};
             
-            // API endpoint with parameters
-            // With an API key, you can get more features like breed filtering
-            const url = 'https://api.thecatapi.com/v1/images/search?limit=1&has_breeds=1';
+            // Add API key to headers if available
+            if (apiKey) {
+                options.headers = {
+                    'x-api-key': apiKey
+                };
+            }
             
-            const response = await fetch(url, {
-                headers: API_KEY !== 'live_OkKdJNTAPmYipqsZEELIAUBaolMSN3PP6ADkk3fBQU8ZiykqoctsEZpGDKe2A0RK' ? headers : {} // Only send API key if it's been set
-            });
-            
+            // Make the API request
+            const response = await fetch(url, options);
             const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(`API Error: ${response.status}`);
+            }
             
             // Get the URL of the random cat image
             const catImageUrl = data[0].url;
             
             // Set the image source and add event listener for when image loads
             catImage.src = catImageUrl;
-            
-            // If the API returned breed information and the image has breeds
-            if (data[0].breeds && data[0].breeds.length > 0) {
-                const breed = data[0].breeds[0];
-                catImage.alt = `A ${breed.name} cat`;
-                
-                // You could display breed information here if you wanted
-                console.log('Breed info:', breed);
-            } else {
-                catImage.alt = 'A cute random cat';
-            }
             
             catImage.onload = () => {
                 // Hide loading spinner and show the image once it's loaded
@@ -62,7 +101,16 @@ document.addEventListener('DOMContentLoaded', () => {
             // Handle any errors
             loadingSpinner.style.display = 'none';
             console.error('Error fetching cat image:', error);
-            alert('Failed to fetch a cat image. Please try again later.');
+            
+            // Check if the error might be related to the API key
+            if (apiKey && error.message.includes('401')) {
+                apiKeyInfo.textContent = 'Invalid API key. Please check and try again.';
+                setTimeout(() => {
+                    apiKeyInfo.innerHTML = 'Get a free API key at <a href="https://thecatapi.com" target="_blank">TheCatAPI.com</a>';
+                }, 3000);
+            } else {
+                alert('Failed to fetch a cat image. Please try again later.');
+            }
         }
     }
     

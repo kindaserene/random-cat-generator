@@ -111,3 +111,51 @@ footer a:hover {
         max-height: 300px;
     }
 }
+
+.api-key-container {
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+#api-key-input {
+    padding: 0.6rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 60%;
+    font-size: 0.9rem;
+    margin-right: 0.5rem;
+}
+
+.api-key-btn {
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.api-key-btn:hover {
+    background-color: #ff5252;
+}
+
+.api-key-info {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #555;
+}
+
+.api-key-info a {
+    color: #ff6b6b;
+    text-decoration: none;
+}
+
+.api-key-info a:hover {
+    text-decoration: underline;
+}
